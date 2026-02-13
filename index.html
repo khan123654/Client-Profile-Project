@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Client Profile & Job Finder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Client Profile</h1>
+
+    <form id="clientForm">
+        <input type="text" id="name" placeholder="Enter Name" required>
+        <input type="email" id="email" placeholder="Enter Email" required>
+        <input type="text" id="skills" placeholder="Enter Skills (developer/designer/marketing)" required>
+        <button type="submit">Save Profile</button>
+    </form>
+
+    <hr>
+
+    <h2>Find Job</h2>
+
+    <input type="text" id="jobSearch" placeholder="Search Job">
+    <button onclick="searchJob()">Search Job</button>
+
+    <div id="jobResult"></div>
+
+    <hr>
+
+    <h2>Saved Profile</h2>
+    <div id="profileDisplay"></div>
+
+</div>
+
+<script>
+
+document.getElementById("clientForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const clientData = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        skills: document.getElementById("skills").value
+    };
+
+    localStorage.setItem("clientProfile", JSON.stringify(clientData));
+    displayProfile();
+    alert("Profile Saved Successfully!");
+});
+
+function displayProfile(){
+    const data = JSON.parse(localStorage.getItem("clientProfile"));
+
+    if(data){
+        document.getElementById("profileDisplay").innerHTML = `
+            <p><strong>Name:</strong> ${data.name}</p>
+            <p><strong>Email:</strong> ${data.email}</p>
+            <p><strong>Skills:</strong> ${data.skills}</p>
+        `;
+    }
+}
+
+function searchJob(){
+    const job = document.getElementById("jobSearch").value.toLowerCase();
+    const result = document.getElementById("jobResult");
+
+    const jobs = {
+        developer: "Web Developer - ₹30,000/month",
+        designer: "UI/UX Designer - ₹25,000/month",
+        marketing: "Digital Marketing Executive - ₹20,000/month"
+    };
+
+    if(jobs[job]){
+        result.innerHTML = <p class="success">${jobs[job]}</p>;
+    } else {
+        result.innerHTML = <p class="error">No Job Found</p>;
+    }
+}
+
+displayProfile();
+
+</script>
+
+</body>
+</html>
